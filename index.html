@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SWITCH · Instant State Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+    <style>
+        /* ============================
+           ROOT · Premium Dark & Orange
+           ============================ */
+        :root {
+            --primary: #F97316;
+            --primary-dark: #EA580C;
+            --primary-light: #FB923C;
+            --primary-glow: rgba(249, 115, 22, 0.15);
+            --primary-gradient: linear-gradient(135deg, #F97316, #EA580C);
+
+            --bg: #0A0A0A;
+            --bg-card: #141414;
+            --bg-card-hover: #1A1A1A;
+            --border: #2A2A2A;
+            --border-light: #3A3A3A;
+            --text: #FFFFFF;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            --shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+            --shadow-glow: 0 0 60px rgba(249, 115, 22, 0.06);
+
+            --radius: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            --transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            --font: 'Inter', -apple-system, sans-serif;
+        }
+
+        /* Light theme */
+        [data-theme="light"] {
+            --bg: #F1F5F9;
+            --bg-card: #FFFFFF;
+            --bg-card-hover: #F8FAFC;
+            --border: #E2E8F0;
+            --border-light: #CBD5E1;
+            --text: #0F172A;
+            --text-secondary: #475569;
+            --text-muted: #94A3B8;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+            --shadow-glow: 0 0 40px rgba(249, 115, 22, 0.04);
+        }
+
+        /* ============================
+           RESET & BASE
+           ============================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            transition: background var(--transition);
+        }
+
+        .container {
+            max-width: 740px;
+            width: 100%;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 40px 36px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: all var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, var(--primary-glow) 0%, transparent 50%);
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* ============================
+           HEADER
+           ============================ */
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 28px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            z-index: 1;
+        }
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .logo-box {
+            width: 56px;
+            height: 56px;
+            background: transparent;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            border: none;
+            box-shadow: none;
+            transition: all var(--transition);
+            overflow: hidden;
+        }
+        .logo-box:hover {
+            transform: scale(1.05) rotate(-2deg);
+        }
+        .logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 2px 8px rgba(249, 115, 22, 0.2));
+        }
+
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+        .logo-text .accent {
+            color: var(--primary);
+        }
+        .logo-text .version {
+            font-size: 0.5rem;
+            font-weight: 700;
+            background: rgba(249, 115, 22, 0.12);
+            color: var(--primary);
+            padding: 2px 12px;
+            border-radius: var(--radius-full);
+            margin-left: 6px;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(249, 115, 22, 0.1);
+            vertical-align: middle;
+        }
+
+        .header-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+        }
+        .theme-toggle {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition);
+        }
+        .theme-toggle:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        /* ============================
+           PROGRESS BAR
+           ============================ */
+        .progress-section {
+            margin-bottom: 28px;
+            position: relative;
+            z-index: 1;
+        }
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+        .progress-top .count {
+            color: var(--primary);
+        }
+        .progress-track {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+        .progress-track .fill {
+            height: 100%;
+            width: 0%;
+            background: var(--primary-gradient);
+            border-radius: var(--radius-full);
+            transition: width 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        /* ============================
+           QUESTIONS
+           ============================ */
+        .questions-container {
+            position: relative;
+            z-index: 1;
+            min-height: 340px;
+        }
+
+        .question-slide {
+            display: none;
+            animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .question-slide.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(28px) scale(0.97);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .question-item {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 26px 28px;
+            border: 1px solid var(--border);
+            transition: all var(--transition);
+        }
+        .question-item:hover {
+            border-color: var(--border-light);
+        }
+        .question-item .q-number {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 4px;
+        }
+        .question-item .q-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 18px;
+            color: var(--text);
+        }
+        .question-item .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .question-item .options label {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.25s;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        .question-item .options label:hover {
+            border-color: var(--primary);
+            background: rgba(249, 115, 22, 0.04);
+            color: var(--text);
+            transform: translateX(6px);
+        }
+        .question-item .options label:has(input:checked) {
+            border-color: var(--primary);
+            background: rgba(249, 115, 22, 0.08);
+            color: var(--text);
+            box-shadow: 0 0 0 2px var(--primary-glow);
+        }
+        .question-item .options input[type="radio"] {
+            accent-color: var(--primary);
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        /* ============================
+           NAVIGATION
+           ============================ */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 14px;
+            position: relative;
+            z-index: 1;
+        }
+        .btn {
+            padding: 12px 28px;
+            border-radius: var(--radius-full);
+            font-family: var(--font);
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: #fff;
+            box-shadow: 0 4px 24px rgba(249, 115, 22, 0.25);
+        }
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(249, 115, 22, 0.35);
+        }
+        .btn-primary:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover:not(:disabled) {
+            border-color: var(--primary);
+            color: var(--text);
+            background: rgba(249, 115, 22, 0.04);
+        }
+        .btn-secondary:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* ============================
+           RESULT
+           ============================ */
+        .result-box {
+            margin-top: 28px;
+            padding: 32px 28px;
+            background: var(--bg);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
+            display: none;
+            animation: fadeIn 0.6s ease;
+            position: relative;
+            z-index: 1;
+        }
+        .result-box.show {
+            display: block;
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .result-box .result-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+        .result-box .result-title .icon {
+            color: var(--primary);
+        }
+        .result-box .result-factor {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+        .result-box .result-factor strong {
+            color: var(--primary);
+        }
+        .switch-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px 24px;
+            border: 1px solid var(--border);
+            margin: 10px 0;
+            transition: all var(--transition);
+        }
+        .switch-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 40px var(--primary-glow);
+        }
+        .switch-card .s-badge {
+            display: inline-block;
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(249, 115, 22, 0.1);
+            padding: 2px 16px;
+            border-radius: var(--radius-full);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            border: 1px solid rgba(249, 115, 22, 0.08);
+        }
+        .switch-card .s-code {
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: var(--primary);
+            letter-spacing: 1.5px;
+        }
+        .switch-card .s-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin: 2px 0;
+        }
+        .switch-card .s-action {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .global-tip {
+            margin-top: 18px;
+            background: rgba(249, 115, 22, 0.04);
+            padding: 16px 22px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(249, 115, 22, 0.06);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .global-tip strong {
+            color: var(--primary);
+        }
+
+        /* ============================
+           FOOTER
+           ============================ */
+        .footer {
+            text-align: center;
+            margin-top: 32px;
+            color: var(--text-muted);
+            font-size: 0.65rem;
+            letter-spacing: 0.8px;
+            border-top: 1px solid var(--border);
+            padding-top: 18px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+        .footer span {
+            color: var(--primary);
+        }
+
+        /* ============================
+           RESPONSIVE
+           ============================ */
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px 16px;
+            }
+            .header {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            .logo-box {
+                width: 44px;
+                height: 44px;
+                padding: 4px;
+            }
+            .logo-text {
+                font-size: 1.2rem;
+            }
+            .question-item {
+                padding: 18px 16px;
+            }
+            .question-item .q-text {
+                font-size: 0.95rem;
+            }
+            .question-item .options label {
+                padding: 10px 14px;
+                font-size: 0.8rem;
+            }
+            .btn {
+                font-size: 0.75rem;
+                padding: 10px 18px;
+            }
+            .result-box {
+                padding: 20px 16px;
+            }
+        }
+        @media (max-width: 400px) {
+            .logo-text .version {
+                display: none;
+            }
+            .nav-buttons {
+                flex-direction: column;
+            }
+            .nav-buttons .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* ============================
+           SCROLLBAR
+           ============================ */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: var(--radius-full);
+        }
+
+        /* ============================
+           FAVICON STYLES
+           ============================ */
+        link[rel="icon"] {
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <a href="#" class="logo-wrapper">
+                <div class="logo-box">
+                    <img src="https://uploadkon.ir/uploads/6c4a20_26schalten-sie-das-logo-design-der-schaltflaeche-aus-ein-106546-1347.png" alt="SWITCH Logo" />
+                </div>
+                <div class="logo-text">
+                    SWITCH<span class="accent">·</span>
+                    <span class="version">v3</span>
+                </div>
+            </a>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" title="Toggle theme">🌓</button>
+            </div>
+        </header>
+
+        <!-- PROGRESS -->
+        <div class="progress-section">
+            <div class="progress-top">
+                <span>Progress</span>
+                <span class="count" id="progressText">0 / 8</span>
+            </div>
+            <div class="progress-track">
+                <div class="fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- QUESTIONS -->
+        <div class="questions-container" id="questionsContainer"></div>
+
+        <!-- NAVIGATION -->
+        <div class="nav-buttons">
+            <button class="btn btn-secondary" id="prevBtn" disabled>← Back</button>
+            <button class="btn btn-primary" id="nextBtn">Next →</button>
+        </div>
+
+        <!-- RESULT -->
+        <div class="result-box" id="resultBox">
+            <div class="result-title"><span class="icon">🧠</span> Your Instant Switch</div>
+            <div class="result-factor" id="resultFactor"></div>
+            <div id="resultContent"></div>
+            <button class="btn btn-secondary" onclick="resetQuiz()" style="margin-top:14px;">↻ Retake Test</button>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">SWITCH · <span>Architecture</span> of Momentary Mastery</div>
+    </div>
+
+    <script>
+        // ================================================================
+        // DATA · Questions & Factor Database
+        // ================================================================
+
+        const questions = [{
+            id: 1,
+            text: "Right now, where do you feel the most tension or pressure in your body?",
+            options: [
+                { label: "Forehead", weight: { 7: 2, 8: 1 } },
+                { label: "Shoulders", weight: { 1: 3, 2: 2 } },
+                { label: "Stomach", weight: { 19: 2, 25: 1 } },
+                { label: "Chest", weight: { 4: 3, 6: 2 } },
+                { label: "Nowhere", weight: { 5: 2, 23: 1 } }
+            ]
+        }, {
+            id: 2,
+            text: "How does your breath feel right now?",
+            options: [
+                { label: "Shallow & short", weight: { 1: 3, 10: 2, 24: 1 } },
+                { label: "Deep & calm", weight: { 8: 2, 26: 1 } },
+                { label: "Irregular", weight: { 7: 3, 9: 2 } },
+                { label: "Normal", weight: { 23: 1, 30: 1 } }
+            ]
+        }, {
+            id: 3,
+            text: "Where is your mind drifting right now?",
+            options: [
+                { label: "Repetitive anxious thoughts", weight: { 2: 3, 3: 2, 1: 1 } },
+                { label: "Fatigue & lethargy", weight: { 5: 3, 15: 2, 26: 1 } },
+                { label: "Craving something specific", weight: { 13: 3, 18: 2, 33: 1 } },
+                { label: "Scattered & aimless", weight: { 8: 2, 11: 2, 12: 1 } }
+            ]
+        }, {
+            id: 4,
+            text: "What state are your hands in right now?",
+            options: [
+                { label: "Clenched fists", weight: { 6: 3, 1: 2 } },
+                { label: "Open & relaxed", weight: { 8: 2, 23: 1 } },
+                { label: "Cold or numb", weight: { 16: 2, 24: 1 } },
+                { label: "Normal", weight: { 30: 1, 29: 1 } }
+            ]
+        }, {
+            id: 5,
+            text: "How does your current environment feel?",
+            options: [
+                { label: "Chaotic & loud", weight: { 11: 3, 10: 2, 14: 1 } },
+                { label: "Quiet & empty", weight: { 4: 3, 27: 1 } },
+                { label: "Messy & disorganized", weight: { 12: 3, 15: 2 } },
+                { label: "Unfamiliar & new", weight: { 9: 2, 17: 1 } }
+            ]
+        }, {
+            id: 6,
+            text: "If you had to describe your inner state in one word, what would it be?",
+            options: [
+                { label: "Anxiety", weight: { 1: 3, 6: 2, 10: 1 } },
+                { label: "Fatigue", weight: { 5: 3, 15: 2, 26: 1 } },
+                { label: "Apathy", weight: { 19: 2, 23: 2, 30: 1 } },
+                { label: "Loneliness", weight: { 4: 3, 27: 2 } },
+                { label: "Confusion", weight: { 7: 3, 8: 2, 12: 1 } },
+                { label: "None", weight: { 29: 1, 30: 1 } }
+            ]
+        }, {
+            id: 7,
+            text: "At this moment, what are you most drawn to do?",
+            options: [
+                { label: "Eat something sweet", weight: { 19: 3, 25: 2, 33: 3 } },
+                { label: "Rest or sleep", weight: { 15: 2, 26: 2, 27: 1 } },
+                { label: "Check your phone", weight: { 9: 2, 11: 1, 14: 1 } },
+                { label: "Be alone", weight: { 4: 2, 28: 1 } },
+                { label: "Start something new", weight: { 5: 2, 8: 1 } }
+            ]
+        }, {
+            id: 8,
+            text: "What was the last thing that gave you a real sense of pleasure?",
+            options: [
+                { label: "Physical pleasure (food/sleep)", weight: { 19: 2, 23: 1, 33: 1 } },
+                { label: "Mental pleasure (achievement/connection)", weight: { 4: 2, 6: 1, 14: 1 } },
+                { label: "Escape (media/distraction)", weight: { 9: 2, 11: 1, 13: 1 } },
+                { label: "Don't remember / none", weight: { 5: 3, 7: 2, 8: 1 } }
+            ]
+        }];
+
+        const factorDB = {
+            1: { name: "Chronic Stress", switch: "Calm", code: "SCN",
+            action: "Place palm on chest + 1 deep breath (inhale 4, exhale 6)" },
+            2: { name: "Suppressed Thoughts", switch: "Release", code: "RLS",
+            action: "Shrug shoulders up and suddenly drop them" },
+            3: { name: "Self-Criticism", switch: "Forgiveness", code: "FRG",
+                action: "Tap forehead gently with 2 fingers and say 'It's okay'" },
+            4: { name: "Perceived Loneliness", switch: "Connect", code: "CON",
+                action: "Look at a photo of a loved one or send a quick message" },
+            5: { name: "Purposelessness", switch: "Focus", code: "FOC",
+                action: "Visualize a tiny task and start it immediately" },
+            6: { name: "Rejection Sensitivity", switch: "Shield", code: "SHD",
+                action: "Cross arms over chest and press firmly for 3 seconds" },
+            7: { name: "Decision Fatigue", switch: "Simplify", code: "SMP",
+                action: "Make one tiny decision instantly (e.g. pick a color)" },
+            8: { name: "Low Mindfulness", switch: "Presence", code: "PRS",
+                action: "Stare at your fingertip for 3 seconds and breathe" },
+            9: { name: "Blue Light Exposure", switch: "Dim", code: "DIM",
+            action: "Close eyes and cover with palms for 3 seconds" },
+            10: { name: "Sudden Loud Noises", switch: "Shelter", code: "SHE",
+                action: "Cover ears and take 3 deep breaths" },
+            11: { name: "Overcrowding", switch: "Island", code: "ISL",
+                action: "Stare at a point above you and create mental personal space" },
+            12: { name: "Physical Disorganization", switch: "Order", code: "ORD",
+                action: "Pick up one small item and place it where it belongs" },
+            13: { name: "Watching Stimulating Content", switch: "Cut", code: "CUT",
+                action: "Put finger in front of your eyes and say 'Stop'" },
+            14: { name: "Negative Social Interactions", switch: "Reset", code: "RST",
+                action: "Rub hands together and clap 3 times" },
+            15: { name: "Prolonged Stillness", switch: "Walk", code: "WLK",
+                action: "Stand up and take 3 steps forward + 3 steps back" },
+            16: { name: "Poor Temperature", switch: "Tune", code: "TUN",
+                action: "Place wrist under cool running water for 3 seconds" },
+            17: { name: "Triggering Smell", switch: "Clean", code: "CLN",
+                action: "Breathe in through nose, out through mouth (3x)" },
+            18: { name: "Seeing Habit Tools", switch: "Redirect", code: "RDR",
+                action: "Move the object and step 2 feet to the left" },
+            19: { name: "Blood Sugar Drop", switch: "Balance", code: "BAL",
+                action: "Sip water + eat one date or a few raisins" },
+            20: { name: "Tyrosine Deficiency (Dopamine)", switch: "Fuel", code: "FUL",
+                action: "Eat a handful of almonds or walnuts" },
+            21: { name: "Tryptophan Deficiency (Serotonin)", switch: "Soothe", code: "SOO",
+                action: "Eat a banana or drink warm milk" },
+            22: { name: "Omega-3 Deficiency", switch: "Oil", code: "OIL",
+                action: "Eat a spoonful of flaxseed or walnuts" },
+            23: { name: "Mild Dehydration", switch: "Hydrate", code: "HYD",
+                action: "Drink a glass of room-temperature water" },
+            24: { name: "Excess Caffeine", switch: "Reduce", code: "RED",
+                action: "Drink water with a few drops of lemon" },
+            25: { name: "Ultra-Processed Foods", switch: "Natural", code: "NAT",
+                action: "Eat a piece of fresh fruit (apple or cucumber)" },
+            26: { name: "Insomnia", switch: "Restore", code: "RST",
+                action: "Close eyes and take 5 'breeze' breaths" },
+            27: { name: "Late Sleeping (Past 12 AM)", switch: "Nightfall", code: "NFL",
+                action: "Turn off the lights and sit in darkness for 3 seconds" },
+            28: { name: "Menstrual Cycle", switch: "Accept", code: "ACC",
+                action: "Place warm compress on stomach and breathe deeply" },
+            29: { name: "Lack of Morning Sunlight", switch: "Sunrise", code: "SUN",
+                action: "Look at the sky through a window for 3 seconds" },
+            30: { name: "Hormonal Shifts", switch: "Adapt", code: "ADP",
+                action: "Do a gentle forward fold stretch" },
+            31: { name: "Nicotine", switch: "Cleanse", code: "CLZ",
+                action: "Drink fresh lemon water + 3 deep breaths" },
+            32: { name: "Alcohol", switch: "Alert", code: "ALT",
+                action: "Wash face with cold water + stare at a fixed point" },
+            33: { name: "Refined Sugar", switch: "Replace", code: "RPL",
+                action: "Eat a date or raisins + drink water" },
+            34: { name: "Caffeine Sensitivity", switch: "Calm", code: "CAL",
+                action: "Drink chamomile or peppermint tea + deep breath" },
+            35: { name: "Stimulant Drugs", switch: "Stop", code: "STP",
+                action: "Contact a trusted person immediately and say 'I need help'" },
+            36: { name: "Self-Prescribed Supplements", switch: "Consult", code: "DOC",
+                action: "Stop intake and consult a doctor (immediate: drink water)" }
+        };
+
+        // ================================================================
+        // STATE
+        // ================================================================
+
+        let currentIndex = 0;
+        const answers = {};
+
+        // ================================================================
+        // RENDER QUESTIONS
+        // ================================================================
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            questions.forEach((q, idx) => {
+                const slide = document.createElement('div');
+                slide.className = 'question-slide' + (idx === 0 ? ' active' : '');
+                slide.dataset.index = idx;
+
+                let optsHtml = '';
+                q.options.forEach(opt => {
+                    const checked = answers[idx] === opt.label ? 'checked' : '';
+                    optsHtml += `
+                        <label>
+                            <input type="radio" name="q${idx}" value="${opt.label}" ${checked} />
+                            <span>${opt.label}</span>
+                        </label>
+                    `;
+                });
+
+                slide.innerHTML = `
+                    <div class="question-item">
+                        <div class="q-number">Question ${idx+1} of ${questions.length}</div>
+                        <div class="q-text">${q.text}</div>
+                        <div class="options">${optsHtml}</div>
+                    </div>
+                `;
+
+                container.appendChild(slide);
+
+                // Auto-advance on select
+                slide.querySelectorAll('input[type="radio"]').forEach(input => {
+                    input.addEventListener('change', function() {
+                        answers[idx] = this.value;
+                        updateProgress();
+                        if (idx < questions.length - 1) {
+                            setTimeout(() => goTo(idx + 1), 400);
+                        } else {
+                            setTimeout(calculateResult, 500);
+                        }
+                    });
+                });
+            });
+
+            updateNav();
+            updateProgress();
+        }
+
+        // ================================================================
+        // NAVIGATION
+        // ================================================================
+
+        function goTo(index) {
+            if (index < 0 || index >= questions.length) return;
+            currentIndex = index;
+
+            document.querySelectorAll('.question-slide').forEach((el, i) => {
+                el.classList.toggle('active', i === index);
+            });
+
+            updateNav();
+            updateProgress();
+
+            document.querySelector('.questions-container').scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest'
+            });
+        }
+
+        function updateNav() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.textContent = currentIndex === questions.length - 1 ? '📊 Show Result' : 'Next →';
+            nextBtn.disabled = answers[currentIndex] === undefined;
+        }
+
+        function updateProgress() {
+            const total = questions.length;
+            const answered = Object.keys(answers).length;
+            const pct = Math.round((answered / total) * 100);
+
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressText').textContent = `${answered} / ${total}`;
+        }
+
+        // ================================================================
+        // EVENT BINDINGS
+        // ================================================================
+
+        document.getElementById('prevBtn').addEventListener('click', () => goTo(currentIndex - 1));
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentIndex === questions.length - 1) {
+                calculateResult();
+            } else {
+                goTo(currentIndex + 1);
+            }
+        });
+
+        // ================================================================
+        // THEME TOGGLE
+        // ================================================================
+
+        let isDark = true;
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            isDark = !isDark;
+            document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            this.textContent = isDark ? '🌓' : '🌞';
+        });
+
+        // ================================================================
+        // CALCULATE RESULT
+        // ================================================================
+
+        function calculateResult() {
+            for (let i = 0; i < questions.length; i++) {
+                if (answers[i] === undefined) {
+                    goTo(i);
+                    alert(`Please answer question ${i+1} first.`);
+                    return;
+                }
+            }
+
+            const scores = {};
+            questions.forEach((q, idx) => {
+                const selectedLabel = answers[idx];
+                const opt = q.options.find(o => o.label === selectedLabel);
+                if (opt && opt.weight) {
+                    for (const [factorId, weight] of Object.entries(opt.weight)) {
+                        scores[factorId] = (scores[factorId] || 0) + weight;
+                    }
+                }
+            });
+
+            const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            if (sorted.length === 0) {
+                showResult(['1']);
+                return;
+            }
+            const topTwo = sorted.slice(0, 2).map(item => item[0]);
+            showResult(topTwo);
+        }
+
+        function showResult(factorIds) {
+            const resultBox = document.getElementById('resultBox');
+            const content = document.getElementById('resultContent');
+            const factorEl = document.getElementById('resultFactor');
+
+            resultBox.classList.add('show');
+
+            const primary = factorDB[factorIds[0]];
+            const secondary = factorDB[factorIds[1]];
+
+            factorEl.innerHTML =
+                `Primary: <strong>${primary ? primary.name : 'Unknown'}</strong> ${secondary ? '| Alternative: <strong>' + secondary.name + '</strong>' : ''}`;
+
+            let html = '';
+            if (primary) {
+                html += `
+                    <div class="switch-card">
+                        <div class="s-badge">⚡ Primary Switch</div>
+                        <div class="s-code">${primary.code}</div>
+                        <div class="s-name">${primary.switch}</div>
+                        <div class="s-action">${primary.action}</div>
+                    </div>
+                `;
+            }
+            if (secondary && secondary.id !== primary.id) {
+                html += `
+                    <div class="switch-card" style="opacity:0.7;border-color:var(--border);">
+                        <div class="s-badge" style="color:var(--text-muted);background:rgba(255,255,255,0.04);">🔹 Alternative</div>
+                        <div class="s-code" style="color:var(--text-muted);">${secondary.code}</div>
+                        <div class="s-name">${secondary.switch}</div>
+                        <div class="s-action">${secondary.action}</div>
+                    </div>
+                `;
+            }
+            html += `
+                <div class="global-tip">
+                    <strong>⚡ Universal Switch:</strong> If uncertain, say «SCN» and take 3 deep breaths.
+                </div>
+            `;
+
+            content.innerHTML = html;
+            resultBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // ================================================================
+        // RESET
+        // ================================================================
+
+        function resetQuiz() {
+            for (let i = 0; i < questions.length; i++) {
+                delete answers[i];
+                document.querySelectorAll(`input[name="q${i}"]`).forEach(r => r.checked = false);
+            }
+            document.getElementById('resultBox').classList.remove('show');
+            document.getElementById('resultContent').innerHTML = '';
+            document.getElementById('resultFactor').innerHTML = '';
+            goTo(0);
+        }
+
+        // ================================================================
+        // FAVICON SETUP
+        // ================================================================
+
+        function setupFavicon() {
+            const link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+            link.type = 'image/png';
+            link.rel = 'icon';
+            link.href = 'https://uploadkon.ir/uploads/6c4a20_26schalten-sie-das-logo-design-der-schaltflaeche-aus-ein-106546-1347.png';
+            document.head.appendChild(link);
+        }
+        setupFavicon();
+
+        // ================================================================
+        // INIT
+        // ================================================================
+
+        renderQuestions();
+    </script>
+</body>
+</html>
